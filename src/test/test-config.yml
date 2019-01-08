@@ -1,0 +1,12 @@
+logging:
+  level: INFO
+  loggers:
+    com.dropwizardrethinkdb.services: DEBUG
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 8085
+
+swagger:
+  resourcePackage: com.dropwizardrethinkdb.service.resources
