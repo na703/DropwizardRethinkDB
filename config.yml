@@ -1,0 +1,23 @@
+server:
+  applicationConnectors:
+  - type: http
+    port: 8085
+  adminConnectors:
+  - type: http
+    port: 8086
+
+logging:
+  level: INFO
+  loggers:
+    com.dropwizardrethinkdb.services: DEBUG
+
+# Database settings.
+RethinkDB:
+  host: localhost
+  port: 28015
+  db: mydb
+  defaultTable: users
+
+authenticationCachePolicy: maximumSize=10000, expireAfterAccess=30m
+swagger:
+  resourcePackage: com.dropwizardrethinkdb.service.resources
