@@ -30,7 +30,8 @@ target/
 *.iws
 *.ipr
 .idea/
-
+.idea
+idea
 # eclipse project file
 .settings/
 .classpath
