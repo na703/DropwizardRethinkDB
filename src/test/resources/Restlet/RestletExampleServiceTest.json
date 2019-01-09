@@ -1,0 +1,372 @@
+{
+  "front-version": "2.19.1",
+  "version": 3,
+  "nodes": [
+    {
+      "type": "Project",
+      "description": "",
+      "id": "55c3b4f4-d066-4aa0-b994-c9ea35059a10",
+      "lastModified": "2019-01-07T19:49:55.875-05:00",
+      "name": "CoreServices"
+    },
+    {
+      "type": "Scenario",
+      "description": "",
+      "id": "b182ad34-4fe2-4a7c-a5d1-1f356fd64bd6",
+      "lastModified": "2019-01-06T18:30:30.697-05:00",
+      "name": "User",
+      "requestOrder": [
+        "healthCheck",
+        "createUser",
+        "getAuthToken",
+        "getUserById",
+        "updateUser",
+        "deleteUserById"
+      ],
+      "parentId": "55c3b4f4-d066-4aa0-b994-c9ea35059a10"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": [
+            {
+              "name": "guid",
+              "value": "${uuid()}"
+            }
+          ]
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "${url}",
+        "path": "/hello-world"
+      },
+      "description": "",
+      "id": "4bb91326-646e-48fa-9537-2a7f554b7779",
+      "lastModified": "2019-01-06T18:22:12.773-05:00",
+      "name": "healthCheck",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "b182ad34-4fe2-4a7c-a5d1-1f356fd64bd6"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\"firstName\": \"John-${random().substring(100, 99999999)}\",\n \"lastName\": \"Smith-${random().substring(100, 99999999)}\",\n \"email\": \"${\"CoreServices\".\"User\".\"healthCheck\".\"response\".\"body\".\"greetingMessage\"}\",\n \"phoneNumber\": \"1${random()}\",\n \"password\": \"apple123\",\n \"requireAccountActivation\":\"false\",\n \"activationMode\":\"email\"\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "${url}",
+        "path": "/user"
+      },
+      "id": "520937cf-008e-445f-b68e-8b165f0d41cc",
+      "lastModified": "2019-01-07T19:38:16.486-05:00",
+      "name": "createUser",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "201"
+        },
+        {
+          "comparison": "Exists",
+          "subject": "ResponseJsonBody",
+          "path": "$.id",
+          "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "b182ad34-4fe2-4a7c-a5d1-1f356fd64bd6"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n \"email\": \"${\"CoreServices\".\"User\".\"healthCheck\".\"response\".\"body\".\"greetingMessage\"}\",\n \"password\": \"apple123\"\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8085",
+        "path": "/auth/token"
+      },
+      "description": "",
+      "id": "44b1150e-f80d-4028-b18c-60b9fc31a82f",
+      "lastModified": "2019-01-06T18:31:12.128-05:00",
+      "name": "getAuthToken",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "b182ad34-4fe2-4a7c-a5d1-1f356fd64bd6"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8085",
+        "path": "/user/${\"CoreServices\".\"User\".\"createUser\".\"response\".\"body\".\"id\"}"
+      },
+      "id": "ac5b38e5-8504-4c26-9fda-e42fc753113b",
+      "lastModified": "2019-01-06T11:12:45.790-05:00",
+      "name": "getUserById",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"CoreServices\".\"User\".\"getAuthToken\".\"response\".\"body\".\"id\"}"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.id",
+          "value": "${\"CoreServices\".\"User\".\"createUser\".\"response\".\"body\".\"id\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "b182ad34-4fe2-4a7c-a5d1-1f356fd64bd6"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.4",
+        "name": "PUT"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\"firstName\": \"John-${random().substring(100, 99999999)}\",\n \"lastName\": \"Smith-${random().substring(100, 99999999)}\",\n \"email\": \"${uuid()}@gmail.com\",\n \"phoneNumber\": \"11${random()}\"}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${url}",
+        "path": "/user"
+      },
+      "id": "303a520c-b97b-4839-a536-96a15a6fe10f",
+      "lastModified": "2019-01-06T18:31:28.088-05:00",
+      "name": "updateUser",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"CoreServices\".\"User\".\"getAuthToken\".\"response\".\"body\".\"id\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "b182ad34-4fe2-4a7c-a5d1-1f356fd64bd6"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+        "name": "DELETE"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8085",
+        "path": "/user/${\"CoreServices\".\"User\".\"createUser\".\"response\".\"body\".\"id\"}"
+      },
+      "description": "",
+      "id": "5f605907-b143-4e4c-baad-920ad1313e94",
+      "lastModified": "2019-01-07T19:49:55.876-05:00",
+      "name": "deleteUserById",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"CoreServices\".\"User\".\"getAuthToken\".\"response\".\"body\".\"id\"}"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "b182ad34-4fe2-4a7c-a5d1-1f356fd64bd6"
+    },
+    {
+      "type": "Context",
+      "id": "848b0a98-5184-418b-85a4-b06c65df04b2",
+      "lastModified": "2019-01-06T17:48:25.642-05:00",
+      "name": "localhost",
+      "variables": [
+        {
+          "enabled": true,
+          "name": "email",
+          "value": " {$uuid()}"
+        },
+        {
+          "enabled": true,
+          "name": "randPassword",
+          "value": "abcd1234"
+        },
+        {
+          "enabled": true,
+          "name": "url",
+          "value": "http://localhost:8085"
+        }
+      ]
+    }
+  ]
+}
